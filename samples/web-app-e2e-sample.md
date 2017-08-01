@@ -37,17 +37,15 @@ Find Maven's `settings.xml`. There are two locations where a `settings.xml` file
 Within the `<servers>` element, add a new server definition with your Azure Service Principal credentials.
 
 ```xml
-<servers>
-    <server>
-        <id>azure-auth</id>
-        <configuration>
-            <client>your-client-id</client>
-            <tenant>your-tenant-id</tenant>
-            <key>your-key</key>
-            <environment>AZURE</environment>
-        </configuration>
-    </server>
-</servers>
+<server>
+    <id>azure-auth</id>
+    <configuration>
+        <client>your-client-id</client>
+        <tenant>your-tenant-id</tenant>
+        <key>your-key</key>
+        <environment>AZURE</environment>
+    </configuration>
+</server>
 ```
 
 ### Build the project
