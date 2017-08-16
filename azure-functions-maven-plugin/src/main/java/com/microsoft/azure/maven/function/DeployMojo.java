@@ -10,6 +10,7 @@ import com.microsoft.azure.management.appservice.FunctionApp;
 import com.microsoft.azure.management.appservice.FunctionApp.DefinitionStages.Blank;
 import com.microsoft.azure.management.appservice.FunctionApp.DefinitionStages.NewAppServicePlanWithGroup;
 import com.microsoft.azure.management.appservice.FunctionApp.DefinitionStages.WithCreate;
+import com.microsoft.azure.management.appservice.FunctionApp.Update;
 import com.microsoft.azure.maven.function.handlers.ArtifactHandler;
 import com.microsoft.azure.maven.function.handlers.FTPArtifactHandlerImpl;
 import com.microsoft.azure.maven.function.handlers.MSDeployArtifactHandlerImpl;
@@ -59,6 +60,10 @@ public class DeployMojo extends AbstractFunctionMojo {
                     .forEach(w -> w.create());
 
             getLog().info(FUNCTION_APP_CREATED + getAppName());
+        } else {
+            Stream.of(app.update())
+                    .map(this::configureAppSettings)
+                    .forEach(u -> u.apply());
         }
     }
 
@@ -96,6 +101,14 @@ public class DeployMojo extends AbstractFunctionMojo {
             withCreate.withAppSettings(appSettings);
         }
         return withCreate;
+    }
+
+    protected Update configureAppSettings(final Update update) {
+        final Map appSettings = getAppSettings();
+        if (appSettings != null && !appSettings.isEmpty()) {
+            update.withAppSettings(appSettings);
+        }
+        return update;
     }
 
     protected ArtifactHandler getArtifactHandler() {
