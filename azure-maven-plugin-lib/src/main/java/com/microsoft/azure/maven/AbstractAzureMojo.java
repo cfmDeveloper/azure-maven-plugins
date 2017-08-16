@@ -196,18 +196,20 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             if (getAzureClient() == null) {
-                getTelemetryProxy().trackEvent(TelemetryEvent.INIT_FAILURE);
+//                getTelemetryProxy().trackEvent(TelemetryEvent.INIT_FAILURE);
                 throw new MojoExecutionException(AZURE_INIT_FAIL);
-            } else {
+            } /*
+            else {
                 // Repopulate subscriptionId in case it is not configured.
                 getTelemetryProxy().addDefaultProperty(SUBSCRIPTION_ID_KEY, getAzureClient().subscriptionId());
             }
+            */
 
-            trackMojoStart();
+//            trackMojoStart();
 
             doExecute();
 
-            trackMojoSuccess();
+//            trackMojoSuccess();
         } catch (Exception e) {
             handleException(e);
         }
@@ -236,11 +238,13 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
 
     protected void handleException(final Exception exception) throws MojoExecutionException {
         final String message = exception.getMessage();
+        /*
         if (StringUtils.isEmpty(message)) {
             trackMojoFailure(exception.toString());
         } else {
             trackMojoFailure(message);
         }
+        */
 
         if (isFailingOnError()) {
             throw new MojoExecutionException(message, exception);

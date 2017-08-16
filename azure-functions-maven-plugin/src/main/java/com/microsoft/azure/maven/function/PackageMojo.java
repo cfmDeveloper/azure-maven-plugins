@@ -153,7 +153,7 @@ public class PackageMojo extends AbstractFunctionMojo {
         hostJsonFile.createNewFile();
         final ObjectWriter objectWriter = getObjectWriter();
         objectWriter.writeValue(hostJsonFile, config);
-        getLog().info("Successfully saved " + hostJsonFile.getAbsolutePath());
+        getLog().info("Successfully saved to " + hostJsonFile.getAbsolutePath());
     }
 
     protected void writeLocalSettingsToFile(final LocalSettings settings) throws Exception {
@@ -162,7 +162,7 @@ public class PackageMojo extends AbstractFunctionMojo {
         localSettingsJsonFile.createNewFile();
         final ObjectWriter objectWriter = getObjectWriter();
         objectWriter.writeValue(localSettingsJsonFile, settings);
-        getLog().info("Successfully saved " + localSettingsJsonFile.getAbsolutePath());
+        getLog().info("Successfully saved to " + localSettingsJsonFile.getAbsolutePath());
     }
 
     protected ObjectWriter getObjectWriter() {
