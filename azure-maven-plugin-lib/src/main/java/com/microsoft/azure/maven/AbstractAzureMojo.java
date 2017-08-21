@@ -24,7 +24,6 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.rmi.server.ExportException;
 import java.util.HashMap;
 import java.util.UUID;
 

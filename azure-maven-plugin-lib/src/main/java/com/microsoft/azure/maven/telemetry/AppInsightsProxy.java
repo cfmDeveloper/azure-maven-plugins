@@ -9,6 +9,8 @@ package com.microsoft.azure.maven.telemetry;
 import com.microsoft.applicationinsights.TelemetryClient;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,17 @@ public class AppInsightsProxy implements TelemetryProxy {
     // Telemetry is enabled by default.
     protected boolean isEnabled = true;
 
+    protected static class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler {
+        @Override
+        public void uncaughtException(Thread t, Throwable e) {
+            System.out.println("Caught " + e);
+            System.out.println("Stacktrace " + Arrays.toString(e.getStackTrace()));
+            System.out.println("Classloader " + t.getContextClassLoader().toString());
+        }
+    }
+
     public AppInsightsProxy(final TelemetryConfiguration config) {
+        Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler());
         // InstrumentationKey will be read from ApplicationInsights.xml
         client = new TelemetryClient();
         if (config == null) {
