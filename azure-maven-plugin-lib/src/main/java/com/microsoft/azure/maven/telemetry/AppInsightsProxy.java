@@ -7,12 +7,15 @@
 package com.microsoft.azure.maven.telemetry;
 
 import com.microsoft.applicationinsights.TelemetryClient;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.microsoft.applicationinsights.TelemetryConfiguration.*;
 
 public class AppInsightsProxy implements TelemetryProxy {
     public static final String PLUGIN_NAME_KEY = "pluginName";
@@ -35,14 +38,19 @@ public class AppInsightsProxy implements TelemetryProxy {
         public void uncaughtException(Thread t, Throwable e) {
             System.out.println("Caught " + e);
             System.out.println("Stacktrace " + Arrays.toString(e.getStackTrace()));
-            System.out.println("Classloader " + t.getContextClassLoader().toString());
+            e.printStackTrace();
+
+            final ClassRealm c = (ClassRealm) t.getContextClassLoader();
+            if (c != null) {
+                c.display();
+            }
         }
     }
 
     public AppInsightsProxy(final TelemetryConfiguration config) {
         Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler());
         // InstrumentationKey will be read from ApplicationInsights.xml
-        client = new TelemetryClient();
+        client = new TelemetryClient(getActive());
         if (config == null) {
             throw new NullPointerException();
         }
